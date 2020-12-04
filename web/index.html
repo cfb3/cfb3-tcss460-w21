@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+        function validateForm() {
+          var x = document.forms["myForm"]["fname"].value;
+          if (x == "") {
+            alert("Name must be filled out");
+            return false;
+          }
+        }
+        </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        </head>
+<body>
+
+<h1>My First Heading</h1>
+<p>My first paragraph</p>
+<p id="demo"></p>
+<button type="button" onclick="loadHelloGet()">Request GET</button>
+<button type="button" onclick="loadHelloPost()">Request POST</button>
+<button type="button" onclick="signIn()">Request JWT</button>
+
+<form name="myForm"   >
+    Name: <input type="text" id="fnameGet" name="fname">
+    <button type="button" onclick="loadParamGet()">Send a Param Via Get</button>
+  </form>
+
+  <form name="myForm"   >
+    Name: <input type="text" id="fnamePost" name="fname">
+    <button type="button" onclick="loadParamPost()">Send a Param Via Post</button>
+  </form>
+
+  <button type="button" disabled=true onclick="getMessages()" id="msg">Get Messages</button>
+  <form name="msgForm" id="msgForm" >
+    Enter a message to send: <input type="text" id="messageText" name="message">
+    <button type="button" disabled=true id="msgButton" onclick="sendMessage()">Send the Message</button>
+  </form>
+
+  <ol id="msgs">
+
+  </ol>
+
+<script>
+    function signIn() {
+        var xmlhttp = new XMLHttpRequest()
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var myObj = JSON.parse(this.responseText)
+                document.getElementById("demo").innerHTML = myObj.token
+                localStorage.token = myObj.token
+                document.getElementById("msg").disabled = false
+                document.getElementById("msgButton").disabled = false
+            } 
+        }
+        xmlhttp.open("GET", "auth", true)
+        xmlhttp.setRequestHeader("Authorization", "Basic dGVzdDFAdGVzdC5jb206dGVzdDEyMzQ1")
+        xmlhttp.send()
+    }
+
+    function loadHelloGet() {
+        var xmlhttp = new XMLHttpRequest()
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var myObj = JSON.parse(this.responseText)
+                document.getElementById("demo").innerHTML = myObj.message
+            } 
+        }
+        xmlhttp.open("GET", "hello", true)
+        xmlhttp.send()
+    }
+
+    function loadHelloPost() {
+        var xmlhttp = new XMLHttpRequest()
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var myObj = JSON.parse(this.responseText)
+                document.getElementById("demo").innerHTML = myObj.message
+            }
+        }
+        xmlhttp.open("POST", "hello", true)
+        xmlhttp.send()
+    }
+
+    function loadParamGet() {
+        name = document.getElementById("fnameGet").value
+
+        var xmlhttp = new XMLHttpRequest()
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var myObj = JSON.parse(this.responseText)
+                document.getElementById("demo").innerHTML = myObj.message
+            } 
+        }
+        xmlhttp.open("GET", "params?name=" + name, true)
+        xmlhttp.send()
+    }
+
+    function loadParamPost() {
+        name = document.getElementById("fnamePost").value
+
+        var xmlhttp = new XMLHttpRequest()
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var myObj = JSON.parse(this.responseText)
+                document.getElementById("demo").innerHTML = myObj.message
+            } 
+        }
+        xmlhttp.open("Post", "params", true)
+        xmlhttp.setRequestHeader("Content-type", "application/json");
+        xmlhttp.send(JSON.stringify({ "name" : name }))
+    }
+
+    function getMessages() {
+        var xmlhttp = new XMLHttpRequest()
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var myObj = JSON.parse(this.responseText)
+                document.getElementById("demo").innerHTML = myObj.rowCount
+                myObj.rows.forEach(element => {
+                    $("#msgs").append("<li>" + element.message + "</li>")
+                })
+            } 
+        }
+        xmlhttp.open("GET", "messages/1", true)
+        xmlhttp.setRequestHeader("Authorization", "Bearer " + localStorage.token)
+        xmlhttp.send()
+    }
+
+    function sendMessage() {
+        msg = document.getElementById("messageText").value
+
+        var xmlhttp = new XMLHttpRequest()
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var myObj = JSON.parse(this.responseText)
+                document.getElementById("demo").innerHTML = myObj.message
+            } 
+        }
+        xmlhttp.open("Post", "messages", true)
+        xmlhttp.setRequestHeader("Authorization", "Bearer " + localStorage.token)
+        xmlhttp.setRequestHeader("Content-type", "application/json");
+        body = {
+            "chatId" : 1,
+            "message" : msg
+        }
+        xmlhttp.send(JSON.stringify(body))
+    }
+
+</script>
+
+</body>
+</html>

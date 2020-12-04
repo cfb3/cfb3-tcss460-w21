@@ -33,21 +33,7 @@ app.use(function(err, req, res, next) {
   } else next();
 })
 
-/*
- * Return HTML for the / end point. 
- * This is a nice location to document your web service API
- * Create a web page in HTML/CSS and have this end point return it. 
- * Look up the node module 'fs' ex: require('fs');
- */
-app.get("/", (request, response) => {
-    //this is a Web page so set the content-type to HTML
-    response.writeHead(200, {'Content-Type': 'text/html'});
-    for (i = 1; i < 7; i++) {
-        //write a response to the client
-        response.write('<h' + i + ' style="color:blue">Hello World!</h' + i + '>'); 
-    }
-    response.end(); //end the response
-});
+app.use("/", express.static('web'))
 
 /*
  * Serve the API documentation genertated by apidoc as HTML. 
