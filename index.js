@@ -3,11 +3,17 @@ const express = require('express')
 //Create a new instance of express
 const app = express()
 
-//let middleware = require('./utilities/middleware')
+let middleware = require('./middleware')
 
 const bodyParser = require("body-parser");
 //This allows parsing of the body of POST requests, that are encoded in JSON
 app.use(bodyParser.json())
+
+/*
+ * This middleware function will respond to inproperly formed JSON in 
+ * request parameters.
+ */
+app.use(middleware.jsonError)
 
 //Obtain a Pool of DB connections. 
 const { Pool } = require('pg')
@@ -18,20 +24,6 @@ const pool = new Pool({
     }
 })
 
-
-
-
-
-/*
- * This middleware function will respond to inproperly formed JSON in 
- * request parameters.
- */
-app.use(function(err, req, res, next) {
-
-  if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
-    res.status(400).send({ message: "malformed JSON in parameters" });
-  } else next();
-})
 
 app.use("/", express.static('web'))
 
