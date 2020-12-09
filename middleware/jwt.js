@@ -1,16 +1,19 @@
-let jwt = require('jsonwebtoken');
+/*
+ * Source provided by: https://github.com/auth0/node-jsonwebtoken
+ */
+let jwt = require('jsonwebtoken')
 let config = {
     secret: process.env.JSON_WEB_TOKEN
 };
 
 let checkToken = (req, res, next) => {
-  let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase
+  let token = req.headers['x-access-token'] || req.headers['authorization'] // Express headers are auto converted to lowercase
 
 
   if (token) {
     if (token.startsWith('Bearer ')) {
         // Remove Bearer from string
-        token = token.slice(7, token.length);
+        token = token.slice(7, token.length)
     }
 
     jwt.verify(token, config.secret, (err, decoded) => {
@@ -20,8 +23,8 @@ let checkToken = (req, res, next) => {
           message: 'Token is not valid'
         });
       } else {
-        req.decoded = decoded;
-        next();
+        req.decoded = decoded
+        next()
       }
     });
   } else {
