@@ -1,3 +1,5 @@
+#This script runs on mac OsX. It will probably NOT work on Windows. It may work on 
+#linux depending on the shell used.
 MSG=$@
 if [ -z "$MSG" ] 
 then
