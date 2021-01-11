@@ -25,6 +25,10 @@ app.use(require("body-parser").json())
  */
 app.use(middleware.jsonError)
 
+/*
+ * A simple Node.js endpoint that responds with HTML.
+ */
+app.use('/node', require('./routes/hello.js'))
 
 /*
  * When clients connect to the base URL, hosts html and other static files found 
