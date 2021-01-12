@@ -1,10 +1,13 @@
 {
   "name": "450-lab",
   "version": "1.0.0",
-  "description": "TCSS 450 Lab for creating a webservice",
+  "description": "TCSS 460 Site/Serevice",
   "main": "index.js",
   "scripts": {
     "test": "index.js"
+  },
+  "engines": {
+    "node": "14.x"
   },
   "keywords": [
     "TCSS450",

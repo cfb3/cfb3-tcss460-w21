@@ -52,6 +52,6 @@ app.use("/", express.static('web'))
 * let port; = process.env.PORT;
 * if(port == null) {port = 5000} 
 */ 
-app.listen(process.env.PORT || 5000, () => {
-    console.log("Server up and running on port: " + (process.env.PORT || 5000));
+app.listen(5001, () => {
+    console.log("Server up and running on port: " + ( 5001));
 });
